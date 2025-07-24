@@ -6,3 +6,6 @@ Through intuitive volume key operation and sound cues, users are able to capture
 It highlights on OCR accuracy, TTS audibility, chatbots' response quality, and user ratings. The findings indicate that the system effectively enhances target users' information access and gives a good foundation for its possible future extension.
 
 All system prompts and voice interactions are provided in Chinese, in keeping with the app’s local (HK) user base.
+
+<img width="677" height="966" alt="image" src="https://github.com/user-attachments/assets/7bf5e4f2-43f9-4a12-b0c2-3841af414a17" />
+
