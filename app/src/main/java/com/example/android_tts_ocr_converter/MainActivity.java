@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String NO_TEXT_PROMPT = "識別唔到文字，請對準對焦要識別的圖像，並點擊減少音量鍵退回拍攝狀態。";
     private static final String UTTERANCE_ID_RECOGNIZED = "recognized_text";
     private static final long REPEAT_INTERVAL_MS = 1500; // 重複間隔 2 秒
-
+    private Handler promptHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -619,14 +619,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         isPromptRepeating = true;
-        handler.postDelayed(new Runnable() {
+        promptHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (isResultScreen && textToSpeech != null && !textToSpeech.isSpeaking()) {
                     speakText(textToRepeat, null);
                 }
                 if (isResultScreen && isPromptRepeating) {
-                    handler.postDelayed(this, REPEAT_INTERVAL_MS);
+                    promptHandler.postDelayed(this, REPEAT_INTERVAL_MS);
                 } else {
                     isPromptRepeating = false;
                 }
@@ -636,7 +636,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopRepeatingSpeech() {
         isPromptRepeating = false;
-        if (textToSpeech != null && textToSpeech.isSpeaking()) {
+        if (promptHandler != null) {
+            promptHandler.removeCallbacksAndMessages(null); // 只清提示語音，不影響 main handler
+        }
+        if (textToSpeech != null) {
             textToSpeech.stop();
         }
     }
@@ -666,6 +669,9 @@ public class MainActivity extends AppCompatActivity {
                     handler.postDelayed(() -> {
                         if (volumeUpClickCount == 2) {
                             // 检测到双击，触发 Chat AI
+                            stopRepeatingSpeech();
+                            if (textToSpeech != null) textToSpeech.stop();
+                            
                             if (isChatAICooldown) {
                                 Toast.makeText(this, "Please wait a moment before starting Chat AI again", Toast.LENGTH_SHORT).show();
                                 String text = "請保持1秒鐘的間隙時間。";
