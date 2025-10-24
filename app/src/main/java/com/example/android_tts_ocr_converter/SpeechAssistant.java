@@ -152,7 +152,7 @@ public class SpeechAssistant {
 
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("model", "gpt-3.5-turbo");
+            jsonObject.put("model", "gpt-5-mini");
 
             JSONArray jsonArrayMessage = new JSONArray();
             JSONObject jsonObjectMessage = new JSONObject();
